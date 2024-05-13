@@ -1,0 +1,29 @@
+version: '3'
+
+
+services:
+  i2p_spider:
+    restart: always
+    image: chongrufan/spider_clash:v1
+    hostname: spider_clash
+    # 需要将i2p节点的port映射出来
+    # ports:
+    #   - 7070:7070
+    #   - 21106:21106
+    tty: true
+    stdin_open: true
+    deploy:
+      mode: replicated
+      replicas: 1
+    # 将下列文件进行挂载
+    # 1. 配置文件config
+    # 2. 数据文件（流量、流日志）
+    # 3. 日志文件
+    # 4. config配置文件
+    volumes:
+      - "/home/ubuntu/aimafan/spider_clash/config:/app/config"
+      - "/home/ubuntu/aimafan/spider_clash/data:/app/data"
+      - "/home/ubuntu/aimafan/spider_clash/logs:/app/logs"
+      - "/home/ubuntu/aimafan/spider_clash/bushu/config.yaml:/app/clash/conf/config.yaml"
+    # 需要捕获流量，设置特权模式
+    privileged: true
