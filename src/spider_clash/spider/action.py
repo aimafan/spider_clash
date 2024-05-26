@@ -26,8 +26,10 @@ def traffic(TASK_NAME, VPS_NAME, protocal):
     logger.info("流量采集开始")
 
     traffic_name = capture(TASK_NAME, VPS_NAME, formatted_time, protocal)
-    flag.get()
-    cut(traffic_name, "/home/ubuntu/aimafan/data")
+    ok = flag.get()
+    if ok == 1:
+        cut(traffic_name, "../data/json")
+    os.remove(traffic_name)
 
 
 def browser_action():
@@ -63,7 +65,7 @@ def browser_action():
         logger.info("代理启动成功")
 
         # 浏览网页
-        consume(url)
+        ok = consume(url)
 
         # 关代理
         subprocess.Popen(["bash", clash_stop_path], stdout=subprocess.PIPE)
@@ -72,7 +74,10 @@ def browser_action():
 
         # 关流量收集
         stop_capture()
-        flag.put(1)
+        if ok:
+            flag.put(1)
+        else:
+            flag.put(0)
         traffic_thread.join()
         time.sleep(1)
 

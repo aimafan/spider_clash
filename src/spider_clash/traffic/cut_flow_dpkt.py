@@ -6,11 +6,11 @@
 import os
 import dpkt
 from dpkt.utils import inet_to_str
-from handle_jp_isp.myutils.logger import logger
+from spider_clash.myutils.logger import logger
 from tqdm import tqdm
 import json
 from datetime import datetime
-from handle_jp_isp.myutils.config import config
+from spider_clash.myutils.config import config
 
 # 获取当前时间
 now = datetime.now()
@@ -180,7 +180,7 @@ def fenbao_and_restruct(file_name):
     return tcpstream
 
 
-def flow2json(tcpstream, formatted_time, machine, behavior, dir):
+def flow2json(tcpstream, formatted_time, machine, behavior, dir, address):
     # 处理每个表格
     tcpstreams = []
     for stream in tqdm(tcpstream, desc="正在写入json文件"):
@@ -200,6 +200,7 @@ def flow2json(tcpstream, formatted_time, machine, behavior, dir):
         ) = stream.split("_")
         dict["machine"] = machine
         dict["behavior"] = behavior
+        dict["address"] = address
 
         tcpstreams.append(dict)
 
@@ -208,7 +209,7 @@ def flow2json(tcpstream, formatted_time, machine, behavior, dir):
     json_data = "[\n" + ",\n".join(json_lines) + "\n]"
 
     # 将 JSON 字符串写入文件
-    output_path = os.path.join(dir, f"{formatted_time}_{machine}_{behavior}.json")
+    output_path = os.path.join(dir, f"{formatted_time}_{machine}_{behavior}_{address}.json")
     with open(output_path, "w") as json_file:
         json_file.write(json_data)
 
@@ -226,8 +227,9 @@ def cut(file_name, dir):
     behavior = config["traffic"]["behavior"]
     os.makedirs(dir, exist_ok=True)
     # 将当前时间格式化为所需的字符串形式
-    formatted_time = now.strftime("%Y%m%d%H%M%S")
-    output_path = flow2json(tcpstream, formatted_time, machine, behavior, dir)
+    formatted_time = file_name.split("/")[-1].split("_")[0]
+    address = ".".join(file_name.split("/")[-1].split("_")[1].split(".")[:-1])
+    output_path = flow2json(tcpstream, formatted_time, machine, behavior, dir, address)
     return output_path
 
 

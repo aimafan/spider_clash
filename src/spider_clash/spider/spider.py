@@ -26,6 +26,8 @@ def visit_website(url):
         logger.info(f"正在访问 {url}")
         driver.get(url)
         page = driver.page_source
+        if len(page) < 50:
+            return False
         if "Proxy error: Host is down" in page:
             logger.warn(f"无法访问网站，{str(sleep_time)}秒之后重试")
             time.sleep(sleep_time)
@@ -53,7 +55,9 @@ def consume(url):
     for i in range(5):
         ok = visit_website(url)
         if ok:
-            break
+            return True
+        
+    return False
 
 
 if __name__ == "__main__":

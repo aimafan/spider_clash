@@ -20,8 +20,8 @@ def capture(TASK_NAME, VPS_NAME, formatted_time, protocal):
     tcpdump_command = [
         "tcpdump",
         "-n",
-        protocal,
-        "and",
+        # protocal,
+        # "and",
         "host",
         config["proxy"]["proxy_server"],
         "-w",

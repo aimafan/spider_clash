@@ -2,9 +2,9 @@ version: '3'
 
 
 services:
-  i2p_spider:
+  clash_spider:
     restart: always
-    image: chongrufan/spider_clash:v1
+    image: chongrufan/spider_clash:v2
     hostname: spider_clash
     # 需要将i2p节点的port映射出来
     # ports:
