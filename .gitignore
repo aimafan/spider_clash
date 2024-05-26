@@ -9,3 +9,4 @@ data/*
 .DS_Store
 init_program.sh
 .venv
+bushu/chrome
