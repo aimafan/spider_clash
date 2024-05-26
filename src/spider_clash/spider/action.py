@@ -6,7 +6,7 @@ from spider_clash.myutils.config import config
 from spider_clash.myutils.logger import logger
 import threading
 from spider_clash.traffic.capture import capture, stop_capture
-from spider_clash.traffic.handle_traffic import pcap2flowlog
+from spider_clash.traffic.cut_flow_dpkt import cut
 import shutil
 import subprocess
 import time
@@ -27,7 +27,7 @@ def traffic(TASK_NAME, VPS_NAME, protocal):
 
     traffic_name = capture(TASK_NAME, VPS_NAME, formatted_time, protocal)
     flag.get()
-    pcap2flowlog(traffic_name, TASK_NAME)
+    cut(traffic_name, "/home/ubuntu/aimafan/data")
 
 
 def browser_action():
